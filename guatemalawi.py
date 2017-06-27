@@ -5,13 +5,13 @@ from typing import List, Iterator
 
 
 @lru_cache()
-def all_countries(overlap=2, min_combos=2) -> tuple:
-    return tuple(build_name('', COUNTRIES, overlap, min_combos))
+def all_countries(overlap=2, min_combos=2, min_length=0) -> tuple:
+    return tuple(build_name('', COUNTRIES, overlap, min_combos, min_length))
 
 
-def random_country(overlap=2, min_combos=2) -> str:
+def random_country(overlap=2, min_combos=2, min_length=0) -> str:
     try:
-        return random.choice(all_countries(overlap, min_combos))
+        return random.choice(all_countries(overlap, min_combos, min_length))
     except IndexError:
         return ''
 
@@ -85,14 +85,14 @@ def combine(country1: str, country2: str, threshold=2) -> str:
     return ''
 
 
-def build_name(so_far: str, names: List[str],
-               overlap: int, min_combos: int, combos=0) -> Iterator[str]:
+def build_name(so_far: str, names: List[str], overlap: int, 
+               min_combos: int, min_length: int ,combos=0) -> Iterator[str]:
     for name in names:
         combined = combine(so_far, name, overlap)
         if combined:
             new_names = names[:]
             new_names.remove(name)
             yield from build_name(combined, new_names, overlap, min_combos,
-                                  combos + 1)
-    if combos >= min_combos:
+                                  min_length, combos + 1)
+    if combos >= min_combos and len(so_far) >= min_length:
         yield so_far
