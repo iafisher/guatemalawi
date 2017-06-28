@@ -4,7 +4,7 @@ from functools import reduce, lru_cache
 from typing import List, Iterator
 
 
-@lru_cache()
+#@lru_cache()
 def all_countries(overlap=2, min_combos=2, min_length=0) -> tuple:
     return tuple(build_name('', COUNTRIES, overlap, min_combos, min_length))
 
@@ -73,25 +73,26 @@ COUNTRIES_BY_REGION = {
 COUNTRIES = list(reduce(operator.add, COUNTRIES_BY_REGION.values()))
 
 
-def combine(country1: str, country2: str, threshold=2) -> str:
-    if not country1 or not country2:
-        return country1 + country2
-    if country1 != country2:
-        country1_lower = country1.lower()
-        country2_lower = country2.lower()
-        for i in range(threshold, min(len(country1), len(country2))):
-            if country1_lower[-i:] == country2_lower[:i]:
-                return country1 + country2[i:]
+def combine(c1: str, c2: str, threshold=2) -> str:
+    c1_lower = c1.lower()
+    c2_lower = c2.lower()
+    for i in range(threshold, min(len(c1), len(c2))):
+        if c1_lower[-i:] == c2_lower[:i]:
+            return c1 + c2[i:]
     return ''
 
 
-def build_name(so_far: str, names: List[str], overlap: int, 
-               min_combos: int, min_length: int ,combos=0) -> Iterator[str]:
-    for name in names:
-        combined = combine(so_far, name, overlap)
+def build_name(so_far: str, names: List[str], overlap: int,
+               min_combos: int, min_length: int, combos=0) -> Iterator[str]:
+    for i, name in enumerate(names):
+        if name == so_far:
+            continue
+        if not so_far:
+            combined = name
+        else:
+            combined = combine(so_far, name, overlap)
         if combined:
-            new_names = names[:]
-            new_names.remove(name)
+            new_names = names[:i] + names[i+1:]
             yield from build_name(combined, new_names, overlap, min_combos,
                                   min_length, combos + 1)
     if combos >= min_combos and len(so_far) >= min_length:
