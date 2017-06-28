@@ -4,7 +4,7 @@ from functools import reduce, lru_cache
 from typing import List, Iterator
 
 
-#@lru_cache()
+@lru_cache()
 def all_countries(overlap=2, min_combos=2, min_length=0) -> tuple:
     return tuple(build_name('', COUNTRIES, overlap, min_combos, min_length))
 
