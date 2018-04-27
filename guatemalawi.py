@@ -1,3 +1,4 @@
+import argparse
 import operator
 import random
 from functools import reduce, lru_cache
@@ -97,3 +98,12 @@ def build_name(so_far: str, names: List[str], overlap: int,
                                   min_length, combos + 1)
     if combos >= min_combos and len(so_far) >= min_length:
         yield so_far
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--overlap', type=int, nargs='?', default=2)
+    parser.add_argument('-c', '--combos', type=int, nargs='?', default=2)
+    parser.add_argument('-l', '--length', type=int, nargs='?', default=0)
+    args = parser.parse_args()
+
+    print(random_country(overlap=args.overlap, min_combos=args.combos, min_length=args.length))

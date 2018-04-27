@@ -1,5 +1,15 @@
 # Guatemalawi
+Generate amusing combinations of real-world country names.
 
+## Command-line interface
+```shell
+$ python3 guatemalawi
+Venezuelaos
+$ python3 guatemalawi --combos=3 --overlap=3 --length=30
+United Kingdominicaraguatemalawi
+```
+
+## Python interface
 ```python
 >>> from guatemalawi import random_country, all_countries
 >>> random_country()
@@ -9,5 +19,3 @@
 >>> random_country(min_combos=4, min_length=30)
 'Burkina Fasouth Sudangolatvia'
 ```
-
-The `guatemalawi.py` module exports two public functions: `random_country` and `all_countries`. Both accept the same keyword arguments: `overlap` to control how many characters must overlap for two country names to be combined, `min_combos` to control how many countries must be combined in each outputted name, and `min_length` to control the minimum length of each outputted name.
